@@ -10,8 +10,8 @@
 </p>
 
 <p align="center">
-  <a href="#-download"><strong>Download Client (.zip)</strong></a> •
-  <a href="https://github.com"><strong>Source (GitHub)</strong></a>
+  <a href="https://github.com/DoiKo35/Whistle/Releases"><strong>Releases</strong></a> •
+  <a href="https://DoiKo35.github.io/Whistle/website"><strong>Website</strong></a>
 </p>
 
 ---
