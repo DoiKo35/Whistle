@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="server/uploads/Whistle.png" alt="Whistle Logo" width="120" height="120">
+  <img src="server/uploads/whistle.png" alt="Whistle Logo" width="120" height="120">
 </p>
 
 <h1 align="center">Whistle Messenger</h1>
