@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whistle Desktop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-theme">
+
+  <div id="welcome-screen" class="screen active">
+    <div class="welcome-header">
+      <canvas id="geometry-canvas"></canvas>
+      <div class="logo-plane">
+        <i class="fa-solid fa-wind"></i> </div>
+    </div>
+    <div class="welcome-body">
+      <h1>Whistle Desktop</h1>
+      <p>Fast, secure, and lightweight messaging app.<br>Powered by unique numeric IDs.</p>
+      <div class="welcome-actions">
+        <button class="btn-primary" onclick="showScreen('login-screen')">LOG IN WITH ID</button>
+        <button class="btn-secondary" onclick="showScreen('register-screen')">CREATE ACCOUNT</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="register-screen" class="screen">
+    <div class="auth-container">
+      <div class="auth-logo"><i class="fa-solid fa-wind"></i></div>
+      <h2>Create Whistle Account</h2>
+      <p class="auth-subtitle">Enter your name. Your 7-digit ID will be generated automatically.</p>
+      
+      <div class="form-group">
+        <label>Your Name / Nickname</label>
+        <input type="text" id="reg-nickname" class="input-field" placeholder="e.g. Alex" required>
+      </div>
+
+      <button class="btn-primary" onclick="registerAccount()">GENERATE ID & START</button>
+      <div class="auth-footer"><a href="#" onclick="showScreen('login-screen')">Already have an ID? Log in</a></div>
+    </div>
+  </div>
+
+  <div id="login-screen" class="screen">
+    <div class="auth-container">
+      <div class="auth-logo"><i class="fa-solid fa-wind"></i></div>
+      <h2>Sign in to Whistle</h2>
+      <p class="auth-subtitle">Enter your 7-digit numeric Whistle ID.</p>
+      
+      <div class="form-group">
+        <label>Whistle ID</label>
+        <input type="text" id="login-id" class="input-field" placeholder="e.g. 4829103" required>
+      </div>
+
+      <div id="code-group" class="form-group hidden">
+        <label style="color: #e53935;">Verification Code</label>
+        <input type="text" id="login-code" class="input-field" placeholder="4-digit code from Whistle chat">
+        <small style="color: var(--text-secondary); display: block; margin-top: 5px;">This account is active on another device. We sent a code to your Whistle chat.</small>
+      </div>
+
+      <button class="btn-primary" onclick="loginAccount()">NEXT</button>
+      <div class="auth-footer"><a href="#" onclick="showScreen('register-screen')">Create a new account</a></div>
+    </div>
+  </div>
+
+  <div id="app-screen" class="screen">
+    
+    <div id="side-menu-overlay" class="overlay hidden" onclick="toggleMenu()"></div>
+    <div id="side-menu" class="side-menu hidden">
+      <div class="menu-header">
+        <img id="menu-avatar" src="" alt="Avatar">
+        <div class="menu-user-info">
+          <span id="menu-nickname" class="menu-name">User Name</span>
+          <small id="menu-id-display" class="menu-sub">ID: 0000000</small>
+        </div>
+      </div>
+      <ul class="menu-list">
+        <li onclick="openProfileModal(); toggleMenu();"><i class="fa-solid fa-user"></i> <span>Edit Profile</span></li>
+        <li onclick="alert('Contacts are synced automatically via Database')"><i class="fa-solid fa-address-book"></i> <span>Contacts</span></li>
+		<li onclick="openDevicesModal(); toggleMenu();"><i class="fa-solid fa-laptop"></i> <span>Devices</span></li>
+        <li class="divider"></li>
+        <li class="night-mode-li">
+          <div class="night-mode-label"><i class="fa-solid fa-moon"></i> <span>Night Mode</span></div>
+          <label class="switch">
+            <input type="checkbox" id="night-mode-toggle" onchange="toggleNightMode(this)">
+            <span class="slider round"></span>
+          </label>
+        </li>
+        <li onclick="logout()" style="color: #e53935;"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #e53935;"></i> <span>Log Out</span></li>
+      </ul>
+      <div class="menu-footer">Whistle Desktop v2.0 (Real DB)<br>Secure 7-digit ID Protocol</div>
+    </div>
+
+	<div id="profile-modal" class="modal hidden">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h3>My Profile</h3>
+		  <button class="icon-btn" onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button>
+		</div>
+		<div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+		  <div class="profile-avatar-edit">
+			<img id="edit-avatar-preview" src="" alt="Avatar">
+			<label for="avatar-input" class="change-avatar-btn"><i class="fa-solid fa-camera"></i></label>
+			<input type="file" id="avatar-input" accept="image/*" style="display: none;" onchange="previewAvatar(this)">
+		  </div>
+		  <div class="form-group">
+			<label>Name</label>
+			<input type="text" id="edit-nickname" class="input-field">
+		  </div>
+		  <div class="form-group">
+			<label>Username</label>
+			<input type="text" id="edit-username" class="input-field" placeholder="@username">
+		  </div>
+		  <div class="form-group">
+			<label>Phone number</label>
+			<input type="text" id="edit-phone" class="input-field" placeholder="+123456789">
+		  </div>
+		  <div class="form-group">
+			<label>Bio</label>
+			<input type="text" id="edit-bio" class="input-field" placeholder="I'm using Whistle!">
+		  </div>
+		  <div class="form-group">
+			<label>Birthday</label>
+			<input type="text" id="edit-birthday" class="input-field" placeholder="1 Jan 2000">
+		  </div>
+		  <div class="form-group">
+			<label>Name color</label>
+			<input type="color" id="edit-color" class="input-field" style="height:40px; padding:2px;">
+		  </div>
+		  <button class="btn-primary" onclick="saveProfile()">SAVE CHANGES</button>
+		</div>
+	  </div>
+	</div>
+
+    <div class="sidebar">
+      <div class="sidebar-top">
+        <button class="icon-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" placeholder="Search chats..." id="search-input" oninput="filterChats()">
+        </div>
+      </div>
+      <div id="chats-list" class="chats-list"></div>
+    </div>
+
+    <div class="chat-area">
+      <div id="chat-header" class="chat-header hidden">
+        <div class="chat-header-info" style="cursor: pointer;" onclick="viewActiveChatProfile()">
+          <span id="chat-contact-name" class="contact-name">Select a chat</span>
+          <small id="chat-contact-status" class="contact-status">offline</small>
+        </div>
+      </div>
+
+      <div id="messages-container" class="messages-container wallpaper-bg">
+        <div class="no-chat-selected"><span>Select a chat to start messaging</span></div>
+      </div>
+
+      <div id="chat-input-area" class="chat-input-area hidden">
+        <label for="file-upload" class="icon-btn" title="Send image"><i class="fa-solid fa-image"></i></label>
+        <input type="file" id="file-upload" accept="image/*" style="display: none;" onchange="sendImageFile(this)">
+        
+        <input type="text" id="message-input" placeholder="Write a message..." autocomplete="off">
+        <button id="send-btn" class="icon-btn send-btn" onclick="sendTextMessage()" title="Send"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="view-profile-modal" class="modal hidden">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h3>User info</h3>
+		  <button class="icon-btn" onclick="document.getElementById('view-profile-modal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+		</div>
+		<div class="modal-body text-center" style="text-align: center;">
+		  <img id="view-avatar" src="" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">
+		  <h2 id="view-nickname">---</h2>
+		  <p id="view-username" style="color: var(--accent-blue); font-weight: bold;">@---</p>
+		  <hr class="divider">
+		  <div style="text-align: left; margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+			<div><strong>Phone number:</strong> <span id="view-phone">Unknown</span></div>
+			<div><strong>Bio:</strong> <span id="view-bio">No bio.</span></div>
+			<div><strong>Birthday:</strong> <span id="view-birthday">Unknown</span></div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<div id="devices-modal" class="modal hidden">
+	  <div class="modal-content" style="width: 450px;">
+		<div class="modal-header">
+		  <h3>Active sessions</h3>
+		  <button class="icon-btn" onclick="document.getElementById('devices-modal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+		</div>
+		<div class="modal-body">
+		  <div id="devices-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 60vh; overflow-y: auto;">
+			</div>
+		</div>
+	  </div>
+	</div>
+
+  <audio id="sound-out" src="https://actions.google.com/sounds/v1/foley/beeps_and_bloops.ogg"></audio>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

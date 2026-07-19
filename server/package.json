@@ -1,0 +1,13 @@
+{
+  "name": "whistle-server",
+  "version": "1.0.0",
+  "description": "Whistle Messenger Backend",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.7.2",
+    "sqlite3": "^6.0.1"
+  }
+}
