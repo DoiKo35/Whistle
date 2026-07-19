@@ -9,13 +9,16 @@ function createWindow() {
     height: 700,
     minWidth: 800,
     minHeight: 500,
-    icon: path.join(__dirname, 'icon.ico'), // Можешь добавить свою иконку
+    icon: path.join(__dirname, 'icon.ico'), // Убедись, что файл icon.ico лежит в этой же папке
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
-    },
-    autoHideMenuBar: true
+    }
+    // autoHideMenuBar больше не нужен, убираем его
   });
+
+  // ВОТ ЭТА СТРОКА полностью отключает меню и блокирует его вызов по кнопке Alt
+  mainWindow.setMenu(null); 
 
   mainWindow.loadFile('index.html');
 }

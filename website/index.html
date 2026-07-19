@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whistle Messenger — Communicate Freely</title>
+  <!-- Подключаем иконки, похожие на те, что в интерфейсах -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Использованы ваши фирменные стили и переменные Telegram-дизайна */
+    :root {
+      --font-family: 'Roboto', 'Inter', -apple-system, sans-serif;
+    }
+
+    body.light-theme {
+      --bg-main: #ffffff;
+      --bg-hover: #f1f1f1;
+      --text-main: #000000;
+      --text-secondary: #707579;
+      --accent-blue: #3390ec;
+      --input-bg: #f4f4f5;
+      --border-color: #e0e0e0;
+      --card-bg: #f9f9fa;
+    }
+
+    body.dark-theme {
+      --bg-main: #0e1621;
+      --bg-hover: #202b36;
+      --text-main: #f5f5f5;
+      --text-secondary: #8a9ba8;
+      --accent-blue: #5288c1;
+      --input-bg: #242f3d;
+      --border-color: #101921;
+      --card-bg: #17212b;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: var(--font-family); 
+    }
+    
+    /* Разрешаем скролл для сайта, в отличие от приложения */
+    body, html { 
+      width: 100%; 
+      background: var(--bg-main); 
+      color: var(--text-main); 
+      scroll-behavior: smooth;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Навигационная панель */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: var(--bg-main);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      z-index: 1000;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+    }
+    
+    .logo-area i {
+      font-size: 24px;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      color: var(--text-secondary);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+    .icon-btn:hover { background: var(--bg-hover); color: var(--text-main); }
+
+    .lang-btn {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--accent-blue);
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--accent-blue);
+      background: transparent;
+      transition: 0.2s;
+    }
+    .lang-btn:hover {
+      background: var(--accent-blue);
+      color: #fff;
+    }
+
+    /* Главный экран (Hero Section) */
+    .hero-section {
+      padding-top: 120px;
+      padding-bottom: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg-main) 0%, var(--card-bg) 100%);
+    }
+
+    .logo-plane { 
+      width: 120px; 
+      height: 120px; 
+      background: #fff; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15); 
+      margin-bottom: 30px;
+      animation: float 4s ease-in-out infinite; 
+    }
+    .logo-plane i { font-size: 60px; color: #2a9be5; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+    h1 { font-size: 42px; font-weight: 500; margin-bottom: 16px; }
+    .subtitle { font-size: 18px; color: var(--text-secondary); max-width: 600px; margin-bottom: 40px; line-height: 1.6; }
+
+    .download-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary, .btn-secondary { 
+      padding: 14px 28px; 
+      border-radius: 24px; 
+      font-size: 16px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: 0.2s; 
+      border: none; 
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--accent-blue); color: #fff; }
+    .btn-primary:hover { background: #287ee0; transform: translateY(-2px); }
+    .btn-secondary { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-color); }
+    .btn-secondary:hover { background: var(--bg-hover); transform: translateY(-2px); }
+
+    /* Секция возможностей (Features) */
+    .features-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 20px 8px 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 40px;
+      font-weight: 500;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 60px;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 30px;
+      border-radius: 16px;
+      transition: transform 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .feature-card i {
+      font-size: 32px;
+      color: var(--accent-blue);
+      margin-bottom: 15px;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Подвал сайта */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-main);
+    }
+  </style>
+</head>
+<body class="light-theme">
+
+  <!-- Шапка сайта -->
+  <header>
+    <div class="logo-area">
+      <i class="fa-solid fa-wind"></i>
+      <span>Whistle</span>
+    </div>
+    <div class="nav-controls">
+      <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
+      <button class="icon-btn" onclick="toggleTheme()" title="Сменить тему">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Главный блок -->
+  <section class="hero-section">
+    <div class="logo-plane">
+      <i class="fa-solid fa-wind"></i>
+    </div>
+    <h1 id="mainTitle">Мессенджер Whistle</h1>
+    <p class="subtitle" id="mainSubtitle">Быстрый, удобный и open-source клиент для общения. Управляйте своими сессиями, находите друзей по юзернейму и оставайтесь в курсе событий.</p>
+    
+    <div class="download-container">
+      <!-- Ссылки ведут на сгенерированные файлы установщика и портативной версии -->
+      <a href="https://github.com/DoiKo35/Whistle/releases/download/Client/Whistle-1.0.0-Installer-win.exe" class="btn-primary" id="btnInstaller" download>
+        <i class="fa-solid fa-download"></i> <span>Скачать установщик (.exe)</span>
+      </a>
+      <a href="https://github.com/DoiKo35/Whistle/releases/download/Client/Whistle-1.0.0-Portable-win.zip" class="btn-primary" id="btnPortable">
+        <i class="fa-solid fa-download"></i> <span>Скачать портативную (.zip)</span>
+      </a>
+    </div>
+	<br>
+	<a href="https://github.com/DoiKo35/Whistle" class="btn-secondary" id="btnGithub">
+		<i class="fa-brands fa-github"></i> <span>Source (GitHub)</span>
+    </a>
+  </section>
+
+  <!-- Блок преимуществ -->
+  <section class="features-section">
+    <h2 class="section-title" id="featuresTitle">Возможности мессенджера</h2>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <i class="fa-solid fa-user-gear"></i>
+        <h3 id="f1Title">Гибкая настройка профиля</h3>
+        <p id="f1Desc">Меняйте аватар, устанавливайте кастомный никнейм, указывайте номер телефона и настраивайте описание «О себе» в удобном окне информации.</p>
+      </div>
+
+      <div class="feature-card">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <h3 id="f2Title">Поиск по Username</h3>
+        <p id="f2Desc">Больше не нужно разглашать личные данные. Находите других пользователей и просматривайте их профили по уникальному имени пользователя.</p>
+      </div>
+
+      <div class="feature-card">
+        <i class="fa-solid fa-laptop-medical"></i>
+        <h3 id="f3Title">Управление устройствами</h3>
+        <p id="f3Desc">Безопасность превыше всего. Контролируйте активные сессии во вкладке «Устройства» и дистанционно завершайте работу на старых подключениях.</p>
+      </div>
+
+      <div class="feature-card">
+        <i class="fa-solid fa-bell"></i>
+        <h3 id="f4Title">System Notifications</h3>
+        <p id="f4Desc">Получайте мгновенные уведомления о новых авторизациях в ваш аккаунт от имени системного бота Whistle Notifications.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Подвал -->
+  <footer>
+    <p>&copy; 2026 Whistle Messenger. All rights reserved.</p>
+  </footer>
+
+  <!-- Скрипты локализации и переключения темы -->
+  <script>
+    // База переводов
+    const translations = {
+      ru: {
+        mainTitle: "Мессенджер Whistle",
+        mainSubtitle: "Быстрый, удобный и open-source клиент для общения. Управляйте своими сессиями, находите друзей по юзернейму и оставайтесь в курсе событий.",
+        btnInstaller: "Скачать установщик (.exe)",
+		btnPortable: "Скачать портативную (.zip)",
+		btnGithub: "Source (GitHub)",
+        featuresTitle: "Возможности мессенджера",
+        f1Title: "Гибкая настройка профиля",
+        f1Desc: "Меняйте аватар, устанавливайте кастомный никнейм, указывайте номер телефона и настраивайте описание «О себе» в удобном окне информации.",
+        f2Title: "Поиск по Username",
+        f2Desc: "Больше не нужно разглашать личные данные. Находите других пользователей и просматривайте их профили по уникальному имени пользователя.",
+        f3Title: "Управление устройствами",
+        f3Desc: "Безопасность превыше всего. Контролируйте активные сессии во вкладке «Устройства» и дистанционно завершайте работу на старых подключениях.",
+        f4Title: "System Notifications",
+        f4Desc: "Получайте мгновенные уведомления о новых авторизациях в ваш аккаунт от имени системного бота Whistle Notifications."
+      },
+      en: {
+        mainTitle: "Whistle Messenger",
+        mainSubtitle: "A fast, convenient, and open-source messaging client. Manage your active sessions, find friends by username, and stay updated seamlessly.",
+        btnInstaller: "Download installer (.exe)",
+		btnPortable: "Download portable (.zip)",
+		btnGithub: "Source (GitHub)",
+        featuresTitle: "Messenger Features",
+        f1Title: "Flexible Profile Customization",
+        f1Desc: "Change your avatar, set a custom nickname, add your phone number, and customize your 'About me' text inside a clean info panel.",
+        f2Title: "Search by Username",
+        f2Desc: "No need to share personal details. Find other users and instantly view their dynamic profiles using their unique global username.",
+        f3Title: "Device Management",
+        f3Desc: "Security first. Monitor active sessions in the 'Devices' tab and remotely terminate access on any connected hardware.",
+        f4Title: "System Notifications",
+        f4Desc: "Receive instant security push messages regarding new login activities directly from the official Whistle Notifications channel."
+      }
+    };
+
+    let currentLang = 'ru';
+
+    // Функция смены языка
+    function toggleLanguage() {
+      currentLang = currentLang === 'ru' ? 'en' : 'ru';
+      document.getElementById('langToggle').innerText = currentLang === 'ru' ? 'EN' : 'RU';
+      document.documentElement.lang = currentLang;
+
+      // Применение текстов
+      document.getElementById('mainTitle').innerText = translations[currentLang].mainTitle;
+      document.getElementById('mainSubtitle').innerText = translations[currentLang].mainSubtitle;
+      document.querySelector('#btnInstaller span').innerText = translations[currentLang].btnInstaller;
+      document.querySelector('#btnPortable span').innerText = translations[currentLang].btnPortable;
+	  document.querySelector('#btnGithub span').innerText = translations[currentLang].btnGithub;
+      document.getElementById('featuresTitle').innerText = translations[currentLang].featuresTitle;
+      
+      document.getElementById('f1Title').innerText = translations[currentLang].f1Title;
+      document.getElementById('f1Desc').innerText = translations[currentLang].f1Desc;
+      document.getElementById('f2Title').innerText = translations[currentLang].f2Title;
+      document.getElementById('f2Desc').innerText = translations[currentLang].f2Desc;
+      document.getElementById('f3Title').innerText = translations[currentLang].f3Title;
+      document.getElementById('f3Desc').innerText = translations[currentLang].f3Desc;
+      document.getElementById('f4Title').innerText = translations[currentLang].f4Title;
+      document.getElementById('f4Desc').innerText = translations[currentLang].f4Desc;
+    }
+
+    // Функция смены темы оформления
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      
+      if (body.classList.contains('light-theme')) {
+        body.classList.remove('light-theme');
+        body.classList.add('dark-theme');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        body.classList.remove('dark-theme');
+        body.classList.add('light-theme');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    }
+  </script>
+</body>
+</html>

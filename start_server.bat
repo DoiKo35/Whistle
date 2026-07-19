@@ -1,24 +1,27 @@
 @echo off
-title Whistle Messenger - Server Startup
+title Whistle Server
 cls
 
 echo ===================================================
-echo  Запуск сервера Whistle и туннеля LocalTunnel...
+echo  Starting Whistle Server and Ngrok...
 echo ===================================================
 
-:: 1. Настройки (поменяйте PORT, если ваш сервер работает не на 5000)
+:: SETTINGS
 set PORT=3000
-set SUBDOMAIN=ninety-camels-bet
+set NGROK_URL=corned-halt-untapped.ngrok-free.dev
 
-echo [1/2] Запуск туннеля в отдельном окне...
-:: Запускаем localtunnel параллельно. cmd /k оставит окно открытым, если что-то пойдет не так.
-start "Whistle Tunnel" cmd /k "lt --port %PORT% --subdomain %SUBDOMAIN%"
+:: LOCATING NGROK AND SERVER
+cd server
 
-:: Небольшая пауза в 2 секунды, чтобы туннель успел инициироваться
+echo [1/2] Starting Ngrok...
+:: STARTING NGROK
+start "Whistle Tunnel" cmd /k "ngrok.exe http %PORT% --url=%NGROK_URL%"
+
+:: TIMEOUT
 timeout /t 2 >nul
 
-echo [2/2] Запуск Node.js сервера...
-cd server
+echo [2/2] Starting Whistle Server...
+:: STARTING WHISTLE SERVER
 node server.js
 
 pause

@@ -10,11 +10,11 @@
 </head>
 <body class="light-theme">
 
+  <!-- Welcome Screen -->
   <div id="welcome-screen" class="screen active">
     <div class="welcome-header">
       <canvas id="geometry-canvas"></canvas>
-      <div class="logo-plane">
-        <i class="fa-solid fa-wind"></i> </div>
+      <div class="logo-plane"><i class="fa-solid fa-wind"></i></div>
     </div>
     <div class="welcome-body">
       <h1>Whistle Desktop</h1>
@@ -26,6 +26,7 @@
     </div>
   </div>
 
+  <!-- Register Screen -->
   <div id="register-screen" class="screen">
     <div class="auth-container">
       <div class="auth-logo"><i class="fa-solid fa-wind"></i></div>
@@ -42,6 +43,7 @@
     </div>
   </div>
 
+  <!-- Login Screen -->
   <div id="login-screen" class="screen">
     <div class="auth-container">
       <div class="auth-logo"><i class="fa-solid fa-wind"></i></div>
@@ -56,7 +58,7 @@
       <div id="code-group" class="form-group hidden">
         <label style="color: #e53935;">Verification Code</label>
         <input type="text" id="login-code" class="input-field" placeholder="4-digit code from Whistle chat">
-        <small style="color: var(--text-secondary); display: block; margin-top: 5px;">This account is active on another device. We sent a code to your Whistle chat.</small>
+        <small style="color: var(--text-secondary); display: block; margin-top: 5px;">This account is active on another device. We sent a code to your Whistle official chat.</small>
       </div>
 
       <button class="btn-primary" onclick="loginAccount()">NEXT</button>
@@ -64,6 +66,7 @@
     </div>
   </div>
 
+  <!-- Main App Screen -->
   <div id="app-screen" class="screen">
     
     <div id="side-menu-overlay" class="overlay hidden" onclick="toggleMenu()"></div>
@@ -77,8 +80,8 @@
       </div>
       <ul class="menu-list">
         <li onclick="openProfileModal(); toggleMenu();"><i class="fa-solid fa-user"></i> <span>Edit Profile</span></li>
-        <li onclick="alert('Contacts are synced automatically via Database')"><i class="fa-solid fa-address-book"></i> <span>Contacts</span></li>
-		<li onclick="openDevicesModal(); toggleMenu();"><i class="fa-solid fa-laptop"></i> <span>Devices</span></li>
+        <li onclick="alert('Contacts are synced automatically via Database.');"><i class="fa-solid fa-address-book"></i> <span>Contacts</span></li>
+        <li onclick="openDevicesModal(); toggleMenu();"><i class="fa-solid fa-laptop"></i> <span>Devices</span></li>
         <li class="divider"></li>
         <li class="night-mode-li">
           <div class="night-mode-label"><i class="fa-solid fa-moon"></i> <span>Night Mode</span></div>
@@ -89,50 +92,74 @@
         </li>
         <li onclick="logout()" style="color: #e53935;"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #e53935;"></i> <span>Log Out</span></li>
       </ul>
-      <div class="menu-footer">Whistle Desktop v2.0 (Real DB)<br>Secure 7-digit ID Protocol</div>
+      <div class="menu-footer">Whistle Desktop v2.5<br>Secure 7-digit ID Protocol</div>
     </div>
 
-	<div id="profile-modal" class="modal hidden">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h3>My Profile</h3>
-		  <button class="icon-btn" onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button>
-		</div>
-		<div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
-		  <div class="profile-avatar-edit">
-			<img id="edit-avatar-preview" src="" alt="Avatar">
-			<label for="avatar-input" class="change-avatar-btn"><i class="fa-solid fa-camera"></i></label>
-			<input type="file" id="avatar-input" accept="image/*" style="display: none;" onchange="previewAvatar(this)">
-		  </div>
-		  <div class="form-group">
-			<label>Name</label>
-			<input type="text" id="edit-nickname" class="input-field">
-		  </div>
-		  <div class="form-group">
-			<label>Username</label>
-			<input type="text" id="edit-username" class="input-field" placeholder="@username">
-		  </div>
-		  <div class="form-group">
-			<label>Phone number</label>
-			<input type="text" id="edit-phone" class="input-field" placeholder="+123456789">
-		  </div>
-		  <div class="form-group">
-			<label>Bio</label>
-			<input type="text" id="edit-bio" class="input-field" placeholder="I'm using Whistle!">
-		  </div>
-		  <div class="form-group">
-			<label>Birthday</label>
-			<input type="text" id="edit-birthday" class="input-field" placeholder="1 Jan 2000">
-		  </div>
-		  <div class="form-group">
-			<label>Name color</label>
-			<input type="color" id="edit-color" class="input-field" style="height:40px; padding:2px;">
-		  </div>
-		  <button class="btn-primary" onclick="saveProfile()">SAVE CHANGES</button>
-		</div>
-	  </div>
-	</div>
+    <!-- Edit Profile Modal -->
+    <div id="profile-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>My Profile</h3>
+          <button class="icon-btn" onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+          <div class="profile-avatar-edit">
+            <img id="edit-avatar-preview" src="" alt="Avatar">
+            <label for="avatar-input" class="change-avatar-btn" title="Adjust Avatar"><i class="fa-solid fa-camera"></i></label>
+            <input type="file" id="avatar-input" accept="image/*" style="display: none;" onchange="openAvatarCropper(this)">
+          </div>
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="edit-nickname" class="input-field">
+          </div>
+          <div class="form-group">
+            <label>Username (3-32 chars)</label>
+            <input type="text" id="edit-username" class="input-field" placeholder="e.g. alex_cool" maxlength="32">
+          </div>
+          <div class="form-group">
+            <label>Phone number</label>
+            <input type="text" id="edit-phone" class="input-field" placeholder="+123456789">
+          </div>
+          <div class="form-group">
+            <label>Bio</label>
+            <input type="text" id="edit-bio" class="input-field" placeholder="I'm using Whistle!">
+          </div>
+          <div class="form-group">
+            <label>Birthday</label>
+            <!-- Changed to proper date input for selecting year, month, day -->
+            <input type="date" id="edit-birthday" class="input-field">
+          </div>
+          <button class="btn-primary" onclick="saveProfile()">SAVE CHANGES</button>
+        </div>
+      </div>
+    </div>
 
+    <!-- Avatar Cropper/Adjuster Modal -->
+    <div id="avatar-crop-modal" class="modal hidden">
+      <div class="modal-content" style="width: 360px;">
+        <div class="modal-header">
+          <h3>Adjust Avatar</h3>
+          <button class="icon-btn" onclick="closeAvatarCropper()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body text-center" style="text-align: center;">
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px;">Drag to reposition and use slider to zoom.</p>
+          <div style="position: relative; width: 240px; height: 240px; margin: 0 auto; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent-blue); background: #000; cursor: move;">
+            <canvas id="crop-canvas" width="240" height="240"></canvas>
+          </div>
+          <div style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <i class="fa-solid fa-magnifying-glass-minus" style="color: var(--text-secondary);"></i>
+            <input type="range" id="crop-zoom" min="1" max="3" step="0.05" value="1" style="width: 160px;">
+            <i class="fa-solid fa-magnifying-glass-plus" style="color: var(--text-secondary);"></i>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn-secondary" onclick="closeAvatarCropper()">CANCEL</button>
+            <button class="btn-primary" onclick="applyAvatarCrop()">APPLY</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar with Chats List -->
     <div class="sidebar">
       <div class="sidebar-top">
         <button class="icon-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
@@ -144,6 +171,7 @@
       <div id="chats-list" class="chats-list"></div>
     </div>
 
+    <!-- Chat Area -->
     <div class="chat-area">
       <div id="chat-header" class="chat-header hidden">
         <div class="chat-header-info" style="cursor: pointer;" onclick="viewActiveChatProfile()">
@@ -166,38 +194,39 @@
     </div>
   </div>
   
+  <!-- View Profile Modal -->
   <div id="view-profile-modal" class="modal hidden">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h3>User info</h3>
-		  <button class="icon-btn" onclick="document.getElementById('view-profile-modal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
-		</div>
-		<div class="modal-body text-center" style="text-align: center;">
-		  <img id="view-avatar" src="" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">
-		  <h2 id="view-nickname">---</h2>
-		  <p id="view-username" style="color: var(--accent-blue); font-weight: bold;">@---</p>
-		  <hr class="divider">
-		  <div style="text-align: left; margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-			<div><strong>Phone number:</strong> <span id="view-phone">Unknown</span></div>
-			<div><strong>Bio:</strong> <span id="view-bio">No bio.</span></div>
-			<div><strong>Birthday:</strong> <span id="view-birthday">Unknown</span></div>
-		  </div>
-		</div>
-	  </div>
-	</div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>User Info</h3>
+        <button class="icon-btn" onclick="document.getElementById('view-profile-modal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body text-center" style="text-align: center;">
+        <img id="view-avatar" src="" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">
+        <h2 id="view-nickname">---</h2>
+        <p id="view-username" style="color: var(--accent-blue); font-weight: bold;">@---</p>
+        <hr class="divider">
+        <div style="text-align: left; margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+          <div><strong>Phone number:</strong> <span id="view-phone">Unknown</span></div>
+          <div><strong>Bio:</strong> <span id="view-bio">No bio.</span></div>
+          <div><strong>Birthday:</strong> <span id="view-birthday">Unknown</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-	<div id="devices-modal" class="modal hidden">
-	  <div class="modal-content" style="width: 450px;">
-		<div class="modal-header">
-		  <h3>Active sessions</h3>
-		  <button class="icon-btn" onclick="document.getElementById('devices-modal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
-		</div>
-		<div class="modal-body">
-		  <div id="devices-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 60vh; overflow-y: auto;">
-			</div>
-		</div>
-	  </div>
-	</div>
+  <!-- Active Devices Modal -->
+  <div id="devices-modal" class="modal hidden">
+    <div class="modal-content" style="width: 450px;">
+      <div class="modal-header">
+        <h3>Active Sessions</h3>
+        <button class="icon-btn" onclick="document.getElementById('devices-modal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div id="devices-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 60vh; overflow-y: auto;"></div>
+      </div>
+    </div>
+  </div>
 
   <audio id="sound-out" src="https://actions.google.com/sounds/v1/foley/beeps_and_bloops.ogg"></audio>
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
